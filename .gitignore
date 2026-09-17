@@ -1,0 +1,11 @@
+# Arduino / PlatformIO build artifacts
+build/
+.pio/
+*.bin
+*.elf
+*.hex
+*.map
+
+# Editor/IDE
+.vscode/
+*.swp
