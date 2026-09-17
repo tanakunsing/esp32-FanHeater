@@ -1,6 +1,6 @@
 /*
   ZEEP ESP32-S3 N16R8 - deviceHeaterFan / Heater Relay Control / Local MQTT
-  Firmware version: 1.0.1-deviceHeaterFan
+  Firmware version: 1.1.0-deviceHeaterFan
 
   Data path:
     Raspberry Pi 5 -> Mosquitto -> POD 1 Wi-Fi -> ESP32-S3 -> Relay -> Fan / Heater / Swing motor

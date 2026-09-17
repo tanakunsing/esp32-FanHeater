@@ -16,9 +16,6 @@ void printHelp() {
   Serial.println(F("  level1   (Fan only)"));
   Serial.println(F("  level2   (Fan + Heat1, 1000W)"));
   Serial.println(F("  level3   (Fan + Heat1 + Heat2, 2500W)"));
-  Serial.println(F("  fan_on | fan_off"));
-  Serial.println(F("  heat1_on | heat1_off   (1000W)"));
-  Serial.println(F("  heat2_on | heat2_off   (1500W)"));
   Serial.println(F("  swing_on | swing_off"));
   Serial.println(F("  all_off"));
   Serial.println(F("  status"));

@@ -7,7 +7,7 @@
 // -----------------------------------------------------------------------------
 
 static const char* DEVICE_ID = "controlhub1-pod1";
-static const char* FIRMWARE_VERSION = "1.0.1-deviceHeaterFan";
+static const char* FIRMWARE_VERSION = "1.1.0-deviceHeaterFan";
 
 // Change these two values to match the Pi 5 POD 1 access point exactly.
 static const char* WIFI_SSID = "POD 1 wifi";

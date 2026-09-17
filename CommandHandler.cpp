@@ -11,33 +11,24 @@ bool executeHeaterCommand(String command, bool fromMqtt) {
   bool ok = true;
   const char* detail = "sent";
 
-  if (command == "fan_on") {
-    fan(true);
-  } else if (command == "fan_off") {
-    fan(false);
-  } else if (command == "heat1_on") {
-    heat1(true);
-  } else if (command == "heat1_off") {
-    heat1(false);
-  } else if (command == "heat2_on") {
-    heat2(true);
-  } else if (command == "heat2_off") {
-    heat2(false);
-  } else if (command == "level1") {
-    // Level 1: Fan only, no heat.
+  if (command == "level1") {
+    // Level 1: Fan only, Cold Air
     fan(true);
     heat1(false);
     heat2(false);
+
   } else if (command == "level2") {
     // Level 2: Fan + Heat1 (1000W).
     fan(true);
     heat1(true);
     heat2(false);
+
   } else if (command == "level3") {
-    // Level 3: Fan + Heat1 + Heat2 (2500W).
+    // Level 3:  Fan + Heat1 + Heat2 (2500W).
     fan(true);
     heat1(true);
     heat2(true);
+
   } else if (command == "swing_on") {
     swing(true);
   } else if (command == "swing_off") {

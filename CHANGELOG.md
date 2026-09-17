@@ -3,6 +3,14 @@
 All notable changes to the deviceHeaterFan firmware are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [1.1.0] - 2026-09-17
+
+### Removed
+- Granular relay commands `fan_on/off`, `heat1_on/off`, `heat2_on/off` — confirmed nothing on the Pi/backend side sends them directly. Only the `level1/2/3` presets and `swing_on/off`/`all_off` remain as ways to drive the relays.
+
+### Fixed
+- `printHelp()` no longer advertises the removed granular commands.
+
 ## [1.0.1] - 2026-09-17
 
 ### Changed
