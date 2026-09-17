@@ -3,6 +3,17 @@
 All notable changes to the deviceHeaterFan firmware are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [1.0.1] - 2026-09-17
+
+### Changed
+- Split the monolithic `.ino` into modules by responsibility, no behavior change:
+  - `Config.h` — device/network constants, GPIO pin numbers
+  - `RelayControl.h/.cpp` — hardware layer (fan/heat1/heat2/swing relay control)
+  - `MqttHandler.h/.cpp` — network layer (Wi-Fi/MQTT lifecycle, JSON status/event)
+  - `CommandHandler.h/.cpp` — dispatch layer (text command -> relay actions)
+  - `SerialConsole.h/.cpp` — Serial-only debug console
+  - `deviceHeaterFan.ino` — now only `setup()`/`loop()`
+
 ## [1.0.0] - 2026-09-17
 
 ### Added
