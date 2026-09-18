@@ -2,9 +2,11 @@
 
 #include <Arduino.h>
 
-// Dispatch layer: parses a text command (from Serial or MQTT) and drives
-// RelayControl, then reports the result back through MqttHandler.
+// Dispatch layer: applies a relay-state JSON object (from Serial or MQTT)
+// to RelayControl.
 
 extern uint32_t commandCounter;
 
-bool executeHeaterCommand(String command, bool fromMqtt);
+// - power=false forces everything off (heat must never run without the fan).
+// - heat2=on forces heat1=on too (no "heat2 alone" state, matches level3).
+void applyRelayState(bool power, bool wantHeat1, bool wantHeat2, bool wantSwing);

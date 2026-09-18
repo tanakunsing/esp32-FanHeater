@@ -7,7 +7,7 @@
 // -----------------------------------------------------------------------------
 
 static const char* DEVICE_ID = "controlhub1-pod1";
-static const char* FIRMWARE_VERSION = "1.1.0-deviceHeaterFan";
+static const char* FIRMWARE_VERSION = "2.0.0-deviceHeaterFan";
 
 // Change these two values to match the Pi 5 POD 1 access point exactly.
 static const char* WIFI_SSID = "POD 1 wifi";
@@ -28,11 +28,11 @@ static const uint32_t STATUS_INTERVAL_MS = 30000;
 // -----------------------------------------------------------------------------
 // Relay configuration (heater box: fan, heat1 1000W, heat2 1500W, swing)
 // -----------------------------------------------------------------------------
+static const int PIN_SWING = 4;
+static const int PIN_FAN   = 5;
+static const int PIN_HEAT1 = 6;
+static const int PIN_HEAT2 = 7;
 
-static const int PIN_FAN   = 4;
-static const int PIN_HEAT1 = 5;
-static const int PIN_HEAT2 = 6;
-static const int PIN_SWING = 7;
 
 // Serial-only full test settings.
 static const uint32_t STEP_WAIT_MS = 5000;

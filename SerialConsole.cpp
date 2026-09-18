@@ -3,6 +3,7 @@
 #include "Config.h"
 #include "RelayControl.h"
 #include "CommandHandler.h"
+#include "JsonCommand.h"
 
 static bool fullTestRunning = false;
 
@@ -12,16 +13,16 @@ void printLine() {
 
 void printHelp() {
   Serial.println();
-  Serial.println(F("Commands (Serial and MQTT unless noted):"));
-  Serial.println(F("  level1   (Fan only)"));
-  Serial.println(F("  level2   (Fan + Heat1, 1000W)"));
-  Serial.println(F("  level3   (Fan + Heat1 + Heat2, 2500W)"));
-  Serial.println(F("  swing_on | swing_off"));
-  Serial.println(F("  all_off"));
-  Serial.println(F("  status"));
-  Serial.println(F("Serial only:"));
+  Serial.println(F("Serial input is a full relay-state JSON object:"));
+  Serial.println(F("  {\"power\":\"on\",\"heat1\":\"on\",\"heat2\":\"off\",\"swing\":\"off\"}"));
+  Serial.println(F("Missing/non-\"on\" fields default to off. power=off forces"));
+  Serial.println(F("everything off regardless of heat1/heat2/swing (safety gate)."));
+  Serial.println(F("heat2=on forces heat1=on too (no \"heat2 alone\" state)."));
+  Serial.println(F("Serial-only plain-text utilities:"));
   Serial.println(F("  state | test | help"));
-  Serial.printf("MQTT command topic: %s\n", MQTT_COMMAND_TOPIC);
+  Serial.println(F("MQTT command topic uses the same JSON object (no plain-text"));
+  Serial.println(F("commands anymore):"));
+  Serial.printf("  %s\n", MQTT_COMMAND_TOPIC);
 }
 
 void runFullTest() {
@@ -62,19 +63,31 @@ void runFullTest() {
 void processSerialCommand() {
   if (!Serial.available()) return;
 
-  String command = Serial.readStringUntil('\n');
-  command.trim();
-  String normalized = command;
+  String line = Serial.readStringUntil('\n');
+  line.trim();
+  if (line.length() == 0) return;
+
+  String normalized = line;
   normalized.toLowerCase();
 
-  if (normalized.length() == 0) return;
   if (normalized == "help") {
     printHelp();
-  } else if (normalized == "state") {
-    printStatus();
-  } else if (normalized == "test") {
-    runFullTest();
-  } else if (!executeHeaterCommand(normalized, false)) {
-    Serial.println(F("Unknown or invalid command. Type 'help'."));
+    return;
   }
+  if (normalized == "state") {
+    printStatus();
+    return;
+  }
+  if (normalized == "test") {
+    runFullTest();
+    return;
+  }
+
+  bool power, wantHeat1, wantHeat2, wantSwing;
+  if (!parseRelayStateJson(line, power, wantHeat1, wantHeat2, wantSwing)) {
+    Serial.println(F("Expected JSON: {\"power\":\"on\",\"heat1\":\"on\",\"heat2\":\"off\",\"swing\":\"off\"}"));
+    return;
+  }
+
+  applyRelayState(power, wantHeat1, wantHeat2, wantSwing);
 }

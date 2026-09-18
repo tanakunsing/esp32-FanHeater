@@ -4,6 +4,7 @@
 #include "Config.h"
 #include "RelayControl.h"
 #include "CommandHandler.h"
+#include "JsonCommand.h"
 
 static WiFiClient wifiClient;
 static PubSubClient mqttClient(wifiClient);
@@ -60,10 +61,10 @@ void publishStatus(bool online) {
 void publishCommandEvent(const String& command, bool ok, const char* detail) {
   if (!mqttClient.connected()) return;
 
-  char escapedCommand[96];
+  char escapedCommand[192];
   jsonEscape(command, escapedCommand, sizeof(escapedCommand));
 
-  char payload[320];
+  char payload[384];
   snprintf(
     payload,
     sizeof(payload),
@@ -84,18 +85,26 @@ void publishCommandEvent(const String& command, bool ok, const char* detail) {
 static void onMqttMessage(char* topic, byte* payload, unsigned int length) {
   if (strcmp(topic, MQTT_COMMAND_TOPIC) != 0) return;
 
-  if (length == 0 || length > 80) {
+  if (length == 0 || length > 200) {
     publishCommandEvent("", false, length == 0 ? "empty_command" : "command_too_long");
     return;
   }
 
-  char commandBuffer[81];
+  char commandBuffer[201];
   memcpy(commandBuffer, payload, length);
   commandBuffer[length] = '\0';
 
-  String command(commandBuffer);
-  Serial.printf("[MQTT] RX command: %s\n", command.c_str());
-  executeHeaterCommand(command, true);
+  String line(commandBuffer);
+  Serial.printf("[MQTT] RX: %s\n", line.c_str());
+
+  bool power, heat1, heat2, swing;
+  if (!parseRelayStateJson(line, power, heat1, heat2, swing)) {
+    publishCommandEvent(line, false, "invalid_json");
+    return;
+  }
+
+  applyRelayState(power, heat1, heat2, swing);
+  publishCommandEvent(line, true, "applied");
 }
 
 void mqttSetup() {

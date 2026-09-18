@@ -1,35 +1,38 @@
 /*
   ZEEP ESP32-S3 N16R8 - deviceHeaterFan / Heater Relay Control / Local MQTT
-  Firmware version: 1.1.0-deviceHeaterFan
+  Firmware version: 2.0.0-deviceHeaterFan
 
   Data path:
     Raspberry Pi 5 -> Mosquitto -> POD 1 Wi-Fi -> ESP32-S3 -> Relay -> Fan / Heater / Swing motor
 
-  Usage levels (combined Fan+Heat presets, sent as a single command):
-    level1 -> Fan only
-    level2 -> Fan + Heat1 (1000W)
-    level3 -> Fan + Heat1 + Heat2 (2500W)
+  Command schema (same JSON object over Serial AND MQTT command topic):
+    {"power":"on","heat1":"on","heat2":"off","swing":"off"}
+    - power=false (or missing): everything forced off, no matter what else is set.
+    - heat2=on forces heat1=on too (no "heat2 alone" state).
+    - Any field missing/not exactly "on" is treated as off.
 
   Relay outputs (Active-High):
-    Fan relay      -> GPIO 4
-    Heater 1000W   -> GPIO 5
-    Heater 1500W   -> GPIO 6
-    Swing motor    -> GPIO 7
+    Swing motor    -> GPIO 4
+    Fan relay      -> GPIO 5
+    Heater 1000W   -> GPIO 6
+    Heater 1500W   -> GPIO 7
 
   File layout:
     Config.h          - device/network constants, GPIO pin numbers
     RelayControl.*     - hardware layer: drives the relays, tracks their state
+    JsonCommand.*       - parses the {"power":...} JSON object
     MqttHandler.*       - network layer: Wi-Fi/MQTT lifecycle, JSON status/event
-    CommandHandler.*    - dispatch layer: text command -> relay actions
+    CommandHandler.*    - dispatch layer: JSON state -> relay actions
     SerialConsole.*     - Serial-only debug console (help/state/test)
 
   Required Arduino libraries:
     - PubSubClient by Nick O'Leary
+    - ArduinoJson
 
   IMPORTANT:
     - Edit WIFI_SSID and WIFI_PASSWORD in Config.h before upload.
     - MQTT commands must NOT be retained.
-    - Never enable Heat1/Heat2 without the fan running.
+    - Never enable Heat1/Heat2 without the fan running (enforced in code).
 */
 
 #include <Arduino.h>
