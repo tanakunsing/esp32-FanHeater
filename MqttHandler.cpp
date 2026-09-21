@@ -116,7 +116,9 @@ void mqttSetup() {
 
 void startWifi() {
   Serial.printf("[WiFi] Connecting to '%s'\n", WIFI_SSID);
-  WiFi.mode(WIFI_STA);
+  // AP_STA: stays connected to the Pi's Wi-Fi (station) for MQTT while also
+  // running its own AP for the local web control panel (see WebPortal.cpp).
+  WiFi.mode(WIFI_AP_STA);
   WiFi.setSleep(false);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   lastWifiAttemptAt = millis();

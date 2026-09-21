@@ -1,9 +1,9 @@
 #include "SerialConsole.h"
 #include <Arduino.h>
+#include <WiFi.h>
 #include "Config.h"
 #include "RelayControl.h"
 #include "CommandHandler.h"
-#include "JsonCommand.h"
 
 static bool fullTestRunning = false;
 
@@ -13,15 +13,16 @@ void printLine() {
 
 void printHelp() {
   Serial.println();
-  Serial.println(F("Serial input is a full relay-state JSON object:"));
-  Serial.println(F("  {\"power\":\"on\",\"heat1\":\"on\",\"heat2\":\"off\",\"swing\":\"off\"}"));
-  Serial.println(F("Missing/non-\"on\" fields default to off. power=off forces"));
-  Serial.println(F("everything off regardless of heat1/heat2/swing (safety gate)."));
-  Serial.println(F("heat2=on forces heat1=on too (no \"heat2 alone\" state)."));
+  Serial.println(F("Control this device from a browser instead of Serial:"));
+  Serial.print(F("  Wi-Fi: connect to \""));
+  Serial.print(AP_SSID);
+  Serial.println(F("\""));
+  Serial.print(F("  Then open: http://"));
+  Serial.println(WiFi.softAPIP());
   Serial.println(F("Serial-only plain-text utilities:"));
   Serial.println(F("  state | test | help"));
-  Serial.println(F("MQTT command topic uses the same JSON object (no plain-text"));
-  Serial.println(F("commands anymore):"));
+  Serial.println(F("MQTT command topic takes the same JSON object the web panel sends:"));
+  Serial.println(F("  {\"power\":\"on\",\"heat1\":\"on\",\"heat2\":\"off\",\"swing\":\"off\"}"));
   Serial.printf("  %s\n", MQTT_COMMAND_TOPIC);
 }
 
@@ -72,22 +73,12 @@ void processSerialCommand() {
 
   if (normalized == "help") {
     printHelp();
-    return;
-  }
-  if (normalized == "state") {
+  } else if (normalized == "state") {
     printStatus();
-    return;
-  }
-  if (normalized == "test") {
+  } else if (normalized == "test") {
     runFullTest();
-    return;
+  } else {
+    Serial.println(F("Relay control now happens via the web panel or MQTT, not Serial."));
+    Serial.println(F("Type 'help' for the web panel address."));
   }
-
-  bool power, wantHeat1, wantHeat2, wantSwing;
-  if (!parseRelayStateJson(line, power, wantHeat1, wantHeat2, wantSwing)) {
-    Serial.println(F("Expected JSON: {\"power\":\"on\",\"heat1\":\"on\",\"heat2\":\"off\",\"swing\":\"off\"}"));
-    return;
-  }
-
-  applyRelayState(power, wantHeat1, wantHeat2, wantSwing);
 }
