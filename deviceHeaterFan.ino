@@ -1,6 +1,6 @@
 /*
   ZEEP deviceHeaterFan / Heater Relay Control / Standalone AP Web Panel
-  Firmware version: 3.0.0-deviceHeaterFan
+  Firmware version: 3.0.1-deviceHeaterFan
 
   Runs on either board; only the GPIO numbers in Config.h change:
     - ESP32 Dev Module (plain ESP32, CP2102 USB-UART) -> pins 16/17/18/19 (current)
