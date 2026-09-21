@@ -3,7 +3,7 @@
 
 uint32_t commandCounter = 0;
 
-// Sets all 4 relays from one JSON state object. Used by both Serial and MQTT.
+// Sets all 4 relays from one JSON state object. Called by WebPortal.
 //
 // Two hardware rules enforced regardless of what the JSON asked for:
 //   1. power=false is a hard safety gate: everything is forced off, since

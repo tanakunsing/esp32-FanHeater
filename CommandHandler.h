@@ -2,7 +2,7 @@
 
 #include <Arduino.h>
 
-// Dispatch layer: applies a relay-state JSON object (from Serial or MQTT)
+// Dispatch layer: applies a relay-state JSON object (from the web panel)
 // to RelayControl.
 
 extern uint32_t commandCounter;

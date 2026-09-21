@@ -21,9 +21,6 @@ void printHelp() {
   Serial.println(WiFi.softAPIP());
   Serial.println(F("Serial-only plain-text utilities:"));
   Serial.println(F("  state | test | help"));
-  Serial.println(F("MQTT command topic takes the same JSON object the web panel sends:"));
-  Serial.println(F("  {\"power\":\"on\",\"heat1\":\"on\",\"heat2\":\"off\",\"swing\":\"off\"}"));
-  Serial.printf("  %s\n", MQTT_COMMAND_TOPIC);
 }
 
 void runFullTest() {
@@ -78,7 +75,7 @@ void processSerialCommand() {
   } else if (normalized == "test") {
     runFullTest();
   } else {
-    Serial.println(F("Relay control now happens via the web panel or MQTT, not Serial."));
+    Serial.println(F("Relay control now happens via the web panel, not Serial."));
     Serial.println(F("Type 'help' for the web panel address."));
   }
 }

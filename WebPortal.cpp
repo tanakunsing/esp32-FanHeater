@@ -138,6 +138,7 @@ static void handleCommand() {
 }
 
 void webPortalSetup() {
+  WiFi.mode(WIFI_AP);
   WiFi.softAP(AP_SSID, AP_PASSWORD);
   Serial.print(F("[AP] SSID: "));
   Serial.println(AP_SSID);

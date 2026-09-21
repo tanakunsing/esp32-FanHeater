@@ -3,6 +3,39 @@
 All notable changes to the deviceHeaterFan firmware are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [3.0.0] - 2026-09-21
+
+### Removed
+- MQTT entirely (`MqttHandler.h/.cpp` deleted, `PubSubClient` no longer a dependency).
+- Station Wi-Fi connection to the Pi's AP (`WIFI_SSID`/`WIFI_PASSWORD`, `WIFI_RETRY_MS`) — device no longer joins any external network.
+- **Breaking:** the Raspberry Pi can no longer control this device at all. The MQTT interface spec given to the Pi team is obsolete.
+
+### Changed
+- The device now only runs its own Wi-Fi AP (`deviceHeaterFan-AP`) with the web control panel (added in 2.1.0) as the sole way to control it.
+
+## [2.1.0] - 2026-09-21
+
+### Added
+- Local AP + web control panel (`WebPortal.h/.cpp`): 4 toggle buttons (power/heat1/heat2/swing) and live status, served from the device's own Wi-Fi AP alongside the existing MQTT station connection.
+- `POST /api/command` reuses the same `{"power":...}` JSON schema and `applyRelayState()` dispatcher as MQTT, so the safety gate and heat1/heat2 interlock apply identically.
+
+### Removed
+- Serial no longer accepts relay commands (JSON-over-Serial from 2.0.0 removed); only `help`/`state`/`test` utilities remain.
+
+## [2.0.1] - 2026-09-21
+
+### Changed
+- Documented which GPIO pin set targets which board (16/17/18/19 = ESP32 Dev Module, 4/5/6/7 = ESP32-S3) in `Config.h` and the `.ino` header.
+
+## [2.0.0] - 2026-09-19
+
+### Changed
+- **Breaking:** unified Serial and MQTT on one JSON relay-state schema, `{"power":"on","heat1":"on","heat2":"off","swing":"off"}`, replacing the plain-text `level1/level2/level3/...` command vocabulary on both channels.
+- `power=false` (or missing) forces everything off; `heat2=on` forces `heat1=on` too.
+
+### Removed
+- `executeHeaterCommand()` and the old plain-text command vocabulary.
+
 ## [1.1.0] - 2026-09-17
 
 ### Removed
