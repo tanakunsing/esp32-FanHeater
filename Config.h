@@ -7,7 +7,7 @@
 // -----------------------------------------------------------------------------
 
 static const char* DEVICE_ID = "controlhub1-pod1";
-static const char* FIRMWARE_VERSION = "3.0.1-deviceHeaterFan";
+static const char* FIRMWARE_VERSION = "3.1.0-deviceHeaterFan";
 
 // -----------------------------------------------------------------------------
 // Local control panel: ESP32 hosts its own AP + web server. This is now the

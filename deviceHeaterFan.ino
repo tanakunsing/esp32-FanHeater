@@ -1,6 +1,6 @@
 /*
   ZEEP deviceHeaterFan / Heater Relay Control / Standalone AP Web Panel
-  Firmware version: 3.0.1-deviceHeaterFan
+  Firmware version: 3.1.0-deviceHeaterFan
 
   Runs on either board; only the GPIO numbers in Config.h change:
     - ESP32 Dev Module (plain ESP32, CP2102 USB-UART) -> pins 16/17/18/19 (current)
@@ -25,6 +25,7 @@
     RelayControl.*     - hardware layer: drives the relays, tracks their state
     JsonCommand.*       - parses the {"power":...} JSON object
     WebPortal.*         - AP + web server: buttons and live status
+    OtaUpdate.*         - GET/POST /update: browser-based firmware upload
     CommandHandler.*    - dispatch layer: JSON state -> relay actions
     SerialConsole.*     - Serial-only debug console (help/state/test)
 

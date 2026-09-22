@@ -5,6 +5,7 @@
 #include "RelayControl.h"
 #include "CommandHandler.h"
 #include "JsonCommand.h"
+#include "OtaUpdate.h"
 
 static WebServer server(80);
 
@@ -27,7 +28,9 @@ static const char PAGE_HTML[] PROGMEM = R"rawliteral(
   body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; margin: 0; padding: 20px;
          background: #101418; color: #eef2f6; }
   h1 { font-size: 1.1rem; margin: 0 0 4px; }
-  .sub { color: #8a97a6; font-size: 0.8rem; margin-bottom: 20px; }
+  a { color: #7fb2ff; }
+  .sub { color: #8a97a6; font-size: 0.8rem; margin-bottom: 8px; }
+  .sub:last-of-type { margin-bottom: 20px; }
   .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 420px; }
   button { font-size: 1rem; padding: 22px 10px; border-radius: 12px; border: 2px solid #2a323c;
            background: #1a2027; color: #eef2f6; cursor: pointer; transition: 0.15s; }
@@ -45,6 +48,7 @@ static const char PAGE_HTML[] PROGMEM = R"rawliteral(
 <body>
   <h1>deviceHeaterFan control panel</h1>
   <div class="sub" id="meta">loading...</div>
+  <div class="sub"><a href="/update">firmware update (OTA)</a></div>
 
   <div class="grid">
     <button id="btn-fan" onclick="sendPreset('fan')">Fan Only</button>
@@ -163,6 +167,7 @@ void webPortalSetup() {
   server.on("/", HTTP_GET, handleRoot);
   server.on("/api/status", HTTP_GET, handleStatus);
   server.on("/api/command", HTTP_POST, handleCommand);
+  otaAttachRoutes(server);
   server.begin();
 }
 
