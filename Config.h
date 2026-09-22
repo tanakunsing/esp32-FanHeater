@@ -15,11 +15,16 @@ static const char* FIRMWARE_VERSION = "4.0.1-deviceHeaterFan";
 // match the Pi 5 POD 1 access point exactly.
 // -----------------------------------------------------------------------------
 
-static const char* WIFI_SSID = "POD 1 wifi";
-static const char* WIFI_PASSWORD = "12345678";
+// static const char* WIFI_SSID = "POD 1 wifi";
+// static const char* WIFI_PASSWORD = "12345678";
 
-// Pi 5 AP address, based on the supplied local MQTT setup.
-static const char* MQTT_HOST = "192.168.50.1";
+static const char* WIFI_SSID = "Tanakun";
+static const char* WIFI_PASSWORD = "REDACTED-put-your-hotspot-password-here";
+
+// Testing without the Pi: point this at your PC's IP while it runs Mosquitto
+// on the same Wi-Fi network (see comment above). Revert to the Pi's AP
+// address ("192.168.50.1") once testing against the real Pi again.
+static const char* MQTT_HOST = "10.213.238.217";
 static const uint16_t MQTT_PORT = 1883;
 
 static const char* MQTT_COMMAND_TOPIC = "zeep/pod1/controlhub1/command";
@@ -38,7 +43,7 @@ static const uint32_t STATUS_INTERVAL_MS = 30000;
 // channel; this is automatic and does not need any configuration here).
 // -----------------------------------------------------------------------------
 
-static const char* AP_SSID = "deviceHeaterFan-AP";
+static const char* AP_SSID = "deviceHeaterFan-AP-test";
 static const char* AP_PASSWORD = "heaterfan123";
 
 // -----------------------------------------------------------------------------
