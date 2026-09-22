@@ -3,6 +3,14 @@
 All notable changes to the deviceHeaterFan firmware are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [4.0.1] - 2026-09-22
+
+### Fixed
+- `printHelp()` no longer prints a literal JSON example next to the MQTT topic name — it looked like a command that had already run (it hadn't; it was just help text), which caused confusion during testing.
+
+### Added
+- `setup()` now prints the actual relay status and a clear `Device READY - waiting for commands.` line right after boot, so the Serial log shows what really happened instead of only static help text.
+
 ## [4.0.0] - 2026-09-22
 
 ### Added
@@ -15,6 +23,23 @@ Format follows [Keep a Changelog](https://keepachangelog.com/), versioning follo
 
 ### Notes
 - This reintroduces the same MQTT topics/`DEVICE_ID` as before 3.0.0, so the earlier Pi interface spec applies again unchanged.
+
+## [3.1.0] - 2026-09-21
+
+### Added
+- Browser-based OTA firmware update, WiFiManager-style (`OtaUpdate.h/.cpp`), attached to the existing web server:
+  - `GET /update` — upload page with a file picker and progress bar.
+  - `POST /update` — streams the `.bin` straight into the `Update` library (`UPDATE_SIZE_UNKNOWN`, no full-file buffering), then `ESP.restart()` on success.
+  - Uses the built-in `Update` library (ships with the esp32 core, no new dependency). Confirmed the board's `default` partition scheme already has the dual OTA app partitions this needs.
+  - Linked from the control panel's front page ("firmware update (OTA)").
+
+## [3.0.1] - 2026-09-21
+
+### Changed
+- Replaced the 4 independent toggle buttons (power/heat1/heat2/swing) on the web panel with 4 fixed presets: **Fan Only**, **Heat 1**, **Heat 2**, **Close** — each POSTs one constant JSON payload instead of a computed one.
+  - `Heat 2` omits `heat1` in its payload; the page highlights the button based on the *resulting* state (heat1 forced on too), not the payload sent, since `applyRelayState()`'s heat2-requires-heat1 rule still applies.
+  - No swing control by design — every preset leaves swing off.
+- Backend (`/api/command`) unchanged — still the same JSON schema and dispatcher; this was a page-only change.
 
 ## [3.0.0] - 2026-09-21
 
