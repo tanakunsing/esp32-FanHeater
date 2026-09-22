@@ -7,7 +7,7 @@
 // -----------------------------------------------------------------------------
 
 static const char* DEVICE_ID = "controlhub1-pod1";
-static const char* FIRMWARE_VERSION = "4.0.0-deviceHeaterFan";
+static const char* FIRMWARE_VERSION = "4.0.1-deviceHeaterFan";
 
 // -----------------------------------------------------------------------------
 // Station Wi-Fi: connects to the Pi's AP for MQTT (brought back in 4.0.0,

@@ -19,8 +19,7 @@ void printHelp() {
   Serial.println(F("\""));
   Serial.print(F("  Then open: http://"));
   Serial.println(WiFi.softAPIP());
-  Serial.println(F("Or send the same JSON object to the MQTT command topic:"));
-  Serial.println(F("  {\"power\":\"on\",\"heat1\":\"on\",\"heat2\":\"off\",\"swing\":\"off\"}"));
+  Serial.println(F("Or send commands to the MQTT command topic:"));
   Serial.printf("  %s\n", MQTT_COMMAND_TOPIC);
   Serial.println(F("Serial-only plain-text utilities:"));
   Serial.println(F("  state | test | help"));

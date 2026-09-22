@@ -67,6 +67,11 @@ void setup() {
     PIN_FAN, PIN_HEAT1, PIN_HEAT2, PIN_SWING);
   printLine();
   printHelp();
+
+  Serial.println();
+  Serial.print(F("Current status: "));
+  printStatus();
+  Serial.println(F("Device READY - waiting for commands."));
 }
 
 void loop() {
