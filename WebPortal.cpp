@@ -157,7 +157,8 @@ static void handleCommand() {
 }
 
 void webPortalSetup() {
-  WiFi.mode(WIFI_AP);
+  // Wi-Fi mode (AP_STA) is set by startWifi() in MqttHandler.cpp, which must
+  // run before this — softAP() here only adds the AP on top of that.
   WiFi.softAP(AP_SSID, AP_PASSWORD);
   Serial.print(F("[AP] SSID: "));
   Serial.println(AP_SSID);

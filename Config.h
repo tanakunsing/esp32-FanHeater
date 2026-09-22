@@ -7,12 +7,35 @@
 // -----------------------------------------------------------------------------
 
 static const char* DEVICE_ID = "controlhub1-pod1";
-static const char* FIRMWARE_VERSION = "3.1.0-deviceHeaterFan";
+static const char* FIRMWARE_VERSION = "4.0.0-deviceHeaterFan";
 
 // -----------------------------------------------------------------------------
-// Local control panel: ESP32 hosts its own AP + web server. This is now the
-// ONLY way to control the device — no station Wi-Fi, no MQTT, no Pi
-// connectivity at all (removed in 3.0.0).
+// Station Wi-Fi: connects to the Pi's AP for MQTT (brought back in 4.0.0,
+// alongside — not instead of — the local AP below). Change these two to
+// match the Pi 5 POD 1 access point exactly.
+// -----------------------------------------------------------------------------
+
+static const char* WIFI_SSID = "POD 1 wifi";
+static const char* WIFI_PASSWORD = "12345678";
+
+// Pi 5 AP address, based on the supplied local MQTT setup.
+static const char* MQTT_HOST = "192.168.50.1";
+static const uint16_t MQTT_PORT = 1883;
+
+static const char* MQTT_COMMAND_TOPIC = "zeep/pod1/controlhub1/command";
+static const char* MQTT_STATUS_TOPIC = "zeep/pod1/controlhub1/status";
+static const char* MQTT_EVENT_TOPIC = "zeep/pod1/controlhub1/event";
+
+static const uint32_t WIFI_RETRY_MS = 10000;
+static const uint32_t MQTT_RETRY_MS = 5000;
+static const uint32_t STATUS_INTERVAL_MS = 30000;
+
+// -----------------------------------------------------------------------------
+// Local control panel: ESP32 also hosts its own AP + web server (buttons +
+// OTA update at /update), so the device is reachable even without the Pi's
+// Wi-Fi in range. Runs alongside the station connection above (AP_STA mode
+// — the ESP32 has a single radio, so the AP and station share one Wi-Fi
+// channel; this is automatic and does not need any configuration here).
 // -----------------------------------------------------------------------------
 
 static const char* AP_SSID = "deviceHeaterFan-AP";

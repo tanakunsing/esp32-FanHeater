@@ -3,6 +3,19 @@
 All notable changes to the deviceHeaterFan firmware are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/), versioning follows [Semantic Versioning](https://semver.org/).
 
+## [4.0.0] - 2026-09-22
+
+### Added
+- Station Wi-Fi + MQTT restored (`MqttHandler.h/.cpp`, brought back from the pre-3.0.0 design) — `WIFI_SSID`/`WIFI_PASSWORD`, `MQTT_HOST/PORT`, and the three MQTT topics are back in `Config.h`.
+
+### Changed
+- **Breaking:** Wi-Fi mode is now `WIFI_AP_STA` instead of `WIFI_AP` — the device connects to the Pi's Wi-Fi for MQTT *and* runs its own AP (web panel + OTA) at the same time. Single radio, so AP and station share one Wi-Fi channel automatically; this doesn't affect AP clients.
+- `WebPortal.cpp` no longer calls `WiFi.mode()` itself — `startWifi()` (MqttHandler) sets AP_STA before `webPortalSetup()` adds the AP on top.
+- MQTT command topic accepts the same JSON schema as the web panel (`{"power":...}`), reusing `parseRelayStateJson()` + `applyRelayState()` — same safety gate and heat1/heat2 interlock regardless of source.
+
+### Notes
+- This reintroduces the same MQTT topics/`DEVICE_ID` as before 3.0.0, so the earlier Pi interface spec applies again unchanged.
+
 ## [3.0.0] - 2026-09-21
 
 ### Removed
